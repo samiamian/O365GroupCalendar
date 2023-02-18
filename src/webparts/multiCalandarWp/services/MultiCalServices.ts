@@ -53,21 +53,6 @@ export class MultiCalService {
         if (jsonData !== undefined){
             timeZone = jsonData["Description"];
         }
-        // if (timeZone.toLowerCase().indexOf('pacific time') > -1) {
-        //     timeZone = 'America/Los_Angeles';
-        //   }
-        //   else if (timeZone.toLowerCase().indexOf('central time') > -1) {
-        //     timeZone = 'America/Chicago';
-        //   }
-        //   else if (timeZone.toLowerCase().indexOf('eastern time') > -1) {
-        //     timeZone = 'America/New_York';
-        //   }
-        //   else if (timeZone.toLowerCase().indexOf('mountain time') > -1) {
-        //     timeZone = 'America/Denver';
-        //   }
-        //   else {
-        //     timeZone = 'UTC';
-        //   }
         return timeZone;
     }
     public async getAllGroupEvents(groupId: string,  context: WebPartContext, recursiveCall = false): Promise<O365EventModel[]> {
@@ -98,13 +83,9 @@ export class MultiCalService {
         else {
             eventURL = groupId;
         }       
-
-        console.log(eventURL);
-
         await client.api(eventURL).get().then(async (data) => {
 
             if (data["@odata.nextLink"]) {
-
                 await this.getRecursiveEvents(client, data["@odata.nextLink"], data, timeZone, options,  true);
             }
             
@@ -250,72 +231,6 @@ export class MultiCalService {
         }
         return { frequency, weekDays };
     }
-
-
-    //    // public async getRecursiveEvents(groupId: string, context: WebPartContext,): Promise <O365EventModel[]> {
-    //         // const graph = graphfi().using(SPFx(context));
-     
-    //          let groupEvents: O365EventModel[] = [];
-    //          let options  = '?$select=subject,body,bodyPreview,organizer,attendees,start,end,location,recurrence';
-    //          let eventURL = `https://graph.microsoft.com/v1.0/groups/${groupId}/events${options}`;
-             
-             
-    //          let [graphClient, graphClientErr] = await this.handle(context.msGraphClientFactory.getClient());
-    //          if (graphClientErr) throw new Error("unable to get graphclient ");
-     
-    //          let [tz,tzerror] = await this.handle(this.getCurrentSiteTimeZone(context));
-    //          if (tzerror) throw new Error("unable to get timezone from regional settings");
-    //          // await graph.groups.getById(groupId).calendar.events().then(async (data) => {
-    //          //     console.log(data);
-    //          //     data.map(respItem => {
-    //          //         const attendents: any[] = {...respItem["attendees"]};
-         
-    //          //         if (respItem["recurrence"] == null){
-    //          //                 groupEvents.push({
-    //          //                     id: respItem["id"],
-    //          //                     title: respItem["subject"],
-    //          //                     bodyPreview: respItem["bodyPreview"],
-    //          //                     start: new Date(respItem["start"]["dateTime"]), 
-    //          //                     end: new Date(respItem["end"]["dateTime"]), 
-    //          //                     timeZone: tz, 
-    //          //                     organizerAddress: respItem["organizer"]["emailAddress"]["address"],
-    //          //                     attendees: attendents,
-    //          //                 });
-    //          //             }
-    //          //             else{
-    //          //                let a =  this.getReoccuringEvents(respItem,tz,attendents);
-    //          //                groupEvents.push(...a);
-    //          //             }
-    //          //         });
-    //          // }).catch(err => { console.log(err); });
-     
-    //          await graphClient.api(eventURL).get().then(async (data) => {
-    //              data.value.map(respItem => {
-    //              const attendents = {...respItem["attendees"]};
-     
-    //              if (respItem["recurrence"] == null){
-    //                      groupEvents.push({
-    //                          id: respItem["id"],
-    //                          title: respItem["subject"],
-    //                          bodyPreview: respItem["bodyPreview"],
-    //                          start: new Date(respItem["start"]["dateTime"]), //.toLocaleString("en-US", {timeZone: "US/Mountain"})
-    //                          end: new Date(respItem["end"]["dateTime"]), //.toLocaleString("en-US", {timeZone: "US/Mountain"})
-    //                          timeZone: tz, //timeZone: respItem["end"]["timeZone"],
-    //                          organizerAddress: respItem["organizer"]["emailAddress"]["address"],
-    //                          attendees: attendents,
-    //                      });
-    //                  }
-    //                  else{
-    //                     let a =  this.getReoccuringEvents(respItem,tz,attendents);
-    //                     groupEvents.push(...a);
-    //                  }
-    //              });
-    //          }).catch(err => { console.log(err); });
-             
-    //          console.log(groupEvents);
-    //          return groupEvents;
-    //      }
-     
 }
 const aService = new MultiCalService();
 export default aService;
