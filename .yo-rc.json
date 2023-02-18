@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.14.0",
+    "libraryName": "graph-cal",
+    "libraryId": "bb9f3ac7-bb17-4552-b80c-2bb71cc833f1",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "graphCal",
+    "solutionShortDescription": "graphCal description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

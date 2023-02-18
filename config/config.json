@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "multi-calandar-wp-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/multiCalandarWp/MultiCalandarWpWebPart.js",
+          "manifest": "./src/webparts/multiCalandarWp/MultiCalandarWpWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "MultiCalandarWpWebPartStrings": "lib/webparts/multiCalandarWp/loc/{locale}.js"
+  }
+}
