@@ -2,15 +2,13 @@ import * as React from 'react';
 import styles from './MultiCalandarWp.module.scss';
 import { IMultiCalandarWpProps } from './IMultiCalandarWpProps';
 import { IMultiCalandarWpState } from './IMultiCalandarWpState';
-import { escape } from '@microsoft/sp-lodash-subset';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import { FontIcon } from '@fluentui/react/lib/Icon';
 import * as moment from 'moment';
 import mcs from '../services/MultiCalServices';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { ILabelStyles, mergeStyles, Stack } from '@fluentui/react';
-import { DefaultPalette, registerIcons } from '@fluentui/react/lib/Styling';
+import { mergeStyles, Spinner, SpinnerSize, Stack } from '@fluentui/react';
 import { Label } from 'office-ui-fabric-react';
 
 
@@ -33,26 +31,36 @@ const itemEndStyles: React.CSSProperties = {
   width: 130,
 };
 
+const itemRefreshStyles: React.CSSProperties = {
+  alignItems: 'center',
+  display: 'flex',
+  height: 30,
+  justifyContent: 'right',
+  width: 130,
+};
+
 const itemStartStyles: React.CSSProperties = {
   alignItems: 'center',
   display: 'flex',
   height: 30,
   justifyContent: 'left',
 }
+
+
 export default class MultiCalandarWp extends React.Component<IMultiCalandarWpProps, IMultiCalandarWpState,{}> {
+
   constructor(props: IMultiCalandarWpProps){
     super(props);
     this.state = {
       groupID: '',
-      refreshing: false,
-      loaded: true,
+      refreshed: true,
+      loading: false,
       events: [],
-    };    
+    };
+  
   }
 
   public componentDidMount() {    
-
-    console.log("component did mount");
     //Get group ID of the Site
       mcs.getGroupGUID("sami_team_test",this.props.context)
         .then(value => {
@@ -70,13 +78,13 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
   }
 
   public refreshEvents(){
-    this.setState({refreshing: true,loaded: false, events: []});
+    this.setState({refreshed : !this.state.refreshed, loading: !this.state.loading, events: []});
+
     mcs.getAllGroupEvents("afaf4c15-0090-48ad-a4bf-e8dcbef1200c",this.props.context)
     .then(value => {
       this.setState({ events: value});
     });
-    this.setState({refreshing: false,loaded: true});
-
+    setTimeout(() => {this.setState({refreshed : !this.state.refreshed, loading: !this.state.loading}); }, 1000);
   }
   public render(): React.ReactElement<IMultiCalandarWpProps> {
     const {
@@ -86,17 +94,14 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
       hasTeamsContext,
       userDisplayName
     } = this.props;
-
     return (
       <div>
           <Stack enableScopedSelectors horizontal horizontalAlign="space-between">
             <div style={itemStartStyles}> 
               <Label>Events of </Label>
             </div>
-            <div style={itemEndStyles}>
-              <FontIcon title='Refresh Event List' aria-label='Refresh' iconName='Refresh' className={iconClass} onClick={(event) => {this.refreshEvents()}}/> 
-              <Label >Sync Calendar</Label>
-            </div>
+            {this.state.refreshed && <><div style={itemEndStyles}><FontIcon title='Refresh Event List' aria-label='Refresh' iconName='Refresh' className={iconClass} onClick={(event) => {this.refreshEvents()}}/><Label>Sync Calendar</Label></div> </>}
+            {this.state.loading && <><div style={itemRefreshStyles}><Label >Refreshing... </Label><Spinner size={SpinnerSize.large} /></div></>}
          </Stack>
         <div>
             <Fragment>
@@ -115,3 +120,5 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
     );
   }
 }
+
+
