@@ -57,7 +57,7 @@ export class MultiCalService {
     }
     public async getAllGroupEvents(groupId: string,  context: WebPartContext, recursiveCall = false): Promise<O365EventModel[]> {
 
-        let responseToReturn: O365EventModel[] = [];
+        var responseToReturn = new Array<O365EventModel>();
         let responseToReturnErr: string;
         let options  = '?$select=subject,body,bodyPreview,organizer,attendees,start,end,location,recurrence';
 
@@ -67,15 +67,16 @@ export class MultiCalService {
         let [tz,tzerror] = await this.handle(this.getCurrentSiteTimeZone(context));
         if (tzerror) throw new Error("unable to get timezone from regional settings");
         
-       [responseToReturn, responseToReturnErr] = await this.handle(this.getRecursiveEvents(graphClient,groupId,responseToReturn,tz,options,false));
+       [responseToReturn, responseToReturnErr] = await this.handle(this.getRecursiveEvents(graphClient,groupId,tz,options,false));
         if (responseToReturnErr) throw new Error(" No events found for groupID :: "+groupId);
 
         return responseToReturn;
     }
 
-    private async getRecursiveEvents(client: MSGraphClient, groupId: string, groupEvents: any[], timeZone: string, options: string, isRecursiveCall: boolean = false): Promise <O365EventModel[]> {
+    private async getRecursiveEvents(client: MSGraphClient, groupId: string, timeZone: string, options: string, isRecursiveCall: boolean = false): Promise <O365EventModel[]> {
 
         let eventURL: string = '';
+        var responseToReturn = new Array<O365EventModel>();
 
         if (isRecursiveCall == false) {
             eventURL = `https://graph.microsoft.com/v1.0/groups/${groupId}/events${options}`;
@@ -86,7 +87,7 @@ export class MultiCalService {
         await client.api(eventURL).get().then(async (data) => {
 
             if (data["@odata.nextLink"]) {
-                await this.getRecursiveEvents(client, data["@odata.nextLink"], data, timeZone, options,  true);
+                await this.getRecursiveEvents(client, data["@odata.nextLink"],  timeZone, options,  true);
             }
             
             data.value.map(respItem => {
@@ -94,7 +95,7 @@ export class MultiCalService {
 
             if (respItem["recurrence"] == null){
 
-                    groupEvents.push({
+                responseToReturn.push({
                         id: respItem["id"],
                         title: respItem["subject"],
                         bodyPreview: respItem["bodyPreview"],
@@ -106,14 +107,14 @@ export class MultiCalService {
                     });
                 }
                 else{
-                groupEvents.push(...(this.getReoccuringEvents(respItem,timeZone,attendents)));
+                    responseToReturn.push(...(this.getReoccuringEvents(respItem,timeZone,attendents)));
                 }
             });
             
         }).catch(err => { console.log(err); });
         
-        console.log(groupEvents);
-        return groupEvents;
+        console.log(responseToReturn);
+        return responseToReturn;
 }
 
     private getReoccuringEvents(event: object, timeZone: string, attendents: any): O365EventModel[]{

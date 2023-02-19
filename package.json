@@ -9,7 +9,7 @@
     "test": "gulp test"
   },
   "dependencies": {
-    "@fluentui/react": "^8.105.4",
+    "@fluentui/react": "^8.105.11",
     "@microsoft/sp-core-library": "1.14.0",
     "@microsoft/sp-lodash-subset": "1.14.0",
     "@microsoft/sp-office-ui-fabric-core": "1.14.0",
