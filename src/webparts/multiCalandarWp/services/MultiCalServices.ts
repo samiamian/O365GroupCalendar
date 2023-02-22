@@ -4,8 +4,6 @@ import O365EventModel from "..//Models/IEventType";
 import { Frequency, RRule, Weekday } from 'rrule';
 
 export class MultiCalService {
-
-
    /** @param {Promise} promise
     * @returns {Promise} [ data, undefined ]
     * @returns {Promise} [ undefined, Error ]
@@ -143,7 +141,6 @@ export class MultiCalService {
         let endSec: number = parseInt(timeEnd.split(':')[2]);
         let secondsDiff = Math.abs(new Date(event["start"]["dateTime"]).getTime() - new Date(event["end"]["dateTime"]).getTime()) / 1000;
 
-
         ({ frequency, weekDays } = this.getFrequency(recurrenceType, frequency, event, weekDays));
 
         // if weekdays are selected then fetch the weekday names according to RRULE interface
@@ -157,7 +154,6 @@ export class MultiCalService {
             byweekday: rruleWeekDays
           });
           
-
         let allDates: Date[] = rule.all();
 
         if (allDates.length > 0) {
