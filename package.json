@@ -26,6 +26,7 @@
     "react": "16.13.1",
     "react-big-calendar": "^1.6.3",
     "react-dom": "16.13.1",
+    "react-super-modal": "^1.0.5",
     "rrule": "^2.7.2"
   },
   "devDependencies": {

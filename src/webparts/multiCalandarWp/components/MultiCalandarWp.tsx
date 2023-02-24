@@ -6,7 +6,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import { FontIcon, Icon } from '@fluentui/react/lib/Icon';
 import * as moment from 'moment';
 import mcs from '../services/MultiCalServices';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { mergeStyles, Spinner, SpinnerSize, Stack } from '@fluentui/react';
 import { Label } from 'office-ui-fabric-react';
