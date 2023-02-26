@@ -10,17 +10,17 @@ import { Fragment } from 'react';
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { mergeStyles, Spinner, SpinnerSize, Stack } from '@fluentui/react';
 import { Label } from 'office-ui-fabric-react';
-
+import ModelEvent from "../components/ModelEvent";
 
 const localizer = momentLocalizer(moment);
 
 const iconClass = mergeStyles({
   fontSize: 20,
-  height: 20,
-  width: 20,
+  height: 45,
+  width: 30,
   float: 'right',
   cursor: 'default',
-  padding: 10,
+  padding: 7,
 });
 
 const icon = mergeStyles({
@@ -32,15 +32,7 @@ const icon = mergeStyles({
   color:'red',
 });
 
-const itemEndStyles: React.CSSProperties = {
-  alignItems: 'center',
-  display: 'flex',
-  height: 30,
-  justifyContent: 'left',
-  width: 130,
-};
-
-const invalidGroupStype: React.CSSProperties = {
+const invalidGroupStyle: React.CSSProperties = {
   alignItems: 'center',
   display: 'flex',
   height: 75,
@@ -61,6 +53,7 @@ const itemStartStyles: React.CSSProperties = {
   alignItems: 'center',
   display: 'flex',
   height: 30,
+  fontSize: 20,
   justifyContent: 'left',
 };
 
@@ -76,14 +69,23 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
       refreshed: true,
       dataLoading: false,
       calendarLoading: true,
+      aEvent: null,
+      isModalOpen: false,
       events: [],
     };
-  
+ 
   }
 
-  public handleSelectedEvent = (event) => {
-     window.alert(event.title);
-  };
+  public toggleModal(){
+    this.setState({isModalOpen: !this.state.isModalOpen})
+  }
+  public closeDialog() {  
+    this.setState({ isModalOpen: false })  
+  } 
+  public eventSelected = (event: object) => {
+      this.setState({isModalOpen: true,aEvent: event});
+  }
+
   public componentDidMount() {    
     //Get group ID of the Site
       mcs.getGroupGUID("sami_team_test",this.props.context)
@@ -123,10 +125,8 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
       <div>
           {this.state.calendarLoading && !this.state.isGroupIDValid &&<Spinner size={SpinnerSize.large} />}
           <Stack enableScopedSelectors horizontal horizontalAlign="space-between">
-            <div style={itemStartStyles}> 
-              {this.state.isGroupIDValid && <><Label>Events of </Label></>}
-            </div>
-            {this.state.refreshed && this.state.isGroupIDValid &&<><div style={itemEndStyles}><FontIcon title='Refresh Event List' aria-label='Refresh' iconName='Refresh' className={iconClass} onClick={(event) => {this.refreshEvents()}}/><Label>Sync Calendar</Label></div> </>}
+            <div style={itemStartStyles}> {this.state.isGroupIDValid && <><Label>Events of </Label></>}</div>
+            {this.state.refreshed && this.state.isGroupIDValid &&<><div style={itemRefreshStyles}><FontIcon title='Refresh Event List' aria-label='Refresh' iconName='Refresh' className={iconClass} onClick={(event) => {this.refreshEvents()}}/><Label>Sync Calendar</Label></div> </>}
             {this.state.dataLoading && this.state.isGroupIDValid &&<><div style={itemRefreshStyles}><Label >Refreshing... </Label><Spinner size={SpinnerSize.large} /></div></>}
          </Stack>
         {this.state.isGroupIDValid && <>
@@ -138,7 +138,7 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
                   events={this.state.events}
                   startAccessor="start"
                   endAccessor="end"
-                  onSelectEvent={(event) => this.handleSelectedEvent(event)}
+                  onSelectEvent={(e) => this.eventSelected(e)}
                   style={{ height: 500 }} />
               </div>
             </Fragment>
@@ -150,10 +150,18 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
                 </div>
                 <div></div>
                 <div>
-                    <Label style={invalidGroupStype}> - Unable to retrieve GroupID from the given site. Please check your site name.</Label>
+                    <Label style={invalidGroupStyle}> - Unable to retrieve GroupID from the given site. Please check your site name.</Label>
                 </div>
             </>}
          </Stack>
+         {this.state.isModalOpen ?  <ModelEvent  
+            isOpen={this.state.isModalOpen}  
+            title={this.state.aEvent.title}  
+            start={this.state.aEvent.start} 
+            end={this.state.aEvent.end} 
+            details={this.state.aEvent.bodyPreview}
+            onClose={this.closeDialog.bind(this)}> 
+          </ModelEvent> : <></>  }
       </div>
     );
   }

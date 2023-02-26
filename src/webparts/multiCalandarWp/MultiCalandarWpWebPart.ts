@@ -12,6 +12,9 @@ import * as strings from 'MultiCalandarWpWebPartStrings';
 import MultiCalandarWp from './components/MultiCalandarWp';
 import { IMultiCalandarWpProps } from './components/IMultiCalandarWpProps';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 export default class MultiCalandarWpWebPart extends BaseClientSideWebPart<IMultiCalandarWpProps> {
 
   private _isDarkTheme: boolean = false;

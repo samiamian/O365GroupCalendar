@@ -1,0 +1,20 @@
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+
+.detailsGrid {  
+    display: grid;  
+    grid-template-columns: 10% 55%;  
+    font-size: small;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+} 
+
+.title{
+    background-color:white ;
+}
+
+.ms-Dialog-header{
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #003057;
+    color: white;
+}
