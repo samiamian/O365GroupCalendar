@@ -1,31 +1,25 @@
 import { IModelEventProps } from './IModelEventProps';
-
 import * as React from 'react';
 import { initializeIcons } from '@fluentui/react/lib/Icons';
 import styles from './ModalEvent.module.scss';
+import { DefaultButton, Dialog, DialogFooter, DialogType } from '@fluentui/react';
 
-import { DefaultButton, Dialog, DialogFooter, DialogType, IDialogStyles } from '@fluentui/react';
 initializeIcons();
 
 const dialogStyles = { 
   main: { maxWidth: 900 } ,
 };  
-const custStyles = props => ({
-  root: [{background: props.theme.palette.themePrimary,}]
-});
+
 const dialogContentProps = {  
   type: DialogType.normal,  
   title: 'Event Details',  
- //className: styles.title,
 }; 
 
 const modalProps = {  
   isBlocking: true,  
 };
 
-
 export default class ModelEvent extends React.Component<IModelEventProps, {}> {
-
   constructor(props: IModelEventProps){
     super(props);
     this.handleClose = this.handleClose.bind(this);
@@ -34,7 +28,7 @@ export default class ModelEvent extends React.Component<IModelEventProps, {}> {
   public handleClose() {  
     this.props.onClose();
   }
-  
+
   public render(): React.ReactElement<IModelEventProps> {
     const buttonStyles = {
       root: { backgroundColor: this.props.color, color: 'white' }

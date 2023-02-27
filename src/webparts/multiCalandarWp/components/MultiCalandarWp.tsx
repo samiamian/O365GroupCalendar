@@ -62,8 +62,6 @@ const itemStartStyles: React.CSSProperties = {
 const HomeIcon = () => <Icon iconName="ChromeClose" className={icon}/>;
 
 export default class MultiCalandarWp extends React.Component<IMultiCalandarWpProps, IMultiCalandarWpState,{}> {
-
-
   constructor(props: IMultiCalandarWpProps){
     super(props);
     this.state = {
@@ -76,7 +74,6 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
       isModalOpen: false,
       events: [],
     };
- 
   }
 
   public toggleModal(){
@@ -103,10 +100,6 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
           console.log(err);
           this.setState({ groupID: "Group ID Data not retrieved! Contact Admin.", isGroupIDValid: false, calendarLoading: false});
         });
-//sami_team_test
-        //"afaf4c15-0090-48ad-a4bf-e8dcbef1200c"
-
-
   }
 
   public refreshEvents(){
@@ -132,10 +125,23 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
     return (
       <div>
           {this.state.calendarLoading && !this.state.isGroupIDValid &&<Spinner size={SpinnerSize.large} />}
+
           <Stack enableScopedSelectors horizontal horizontalAlign="space-between">
-            <div style={itemStartStyles}> {this.state.isGroupIDValid && <><Label>Events of {decodeURIComponent(this.props.description)}</Label></>}</div>
-            {this.state.refreshed && this.state.isGroupIDValid &&<><div style={itemRefreshStyles}><FontIcon title='Refresh Event List' aria-label='Refresh' iconName='Refresh' className={iconClass} onClick={(event) => {this.refreshEvents()}}/><Label>Sync Calendar</Label></div> </>}
-            {this.state.dataLoading && this.state.isGroupIDValid &&<><div style={itemRefreshStyles}><Label >Refreshing... </Label><Spinner size={SpinnerSize.large} /></div></>}
+            <div style={itemStartStyles}> 
+                {this.state.isGroupIDValid && <><Label>Events of {decodeURIComponent(this.props.description)}</Label></>}
+            </div>
+            {this.state.refreshed && this.state.isGroupIDValid &&<>
+              <div style={itemRefreshStyles}>
+                <FontIcon title='Refresh Event List' aria-label='Refresh' iconName='Refresh' className={iconClass} onClick={(event) => {this.refreshEvents()}}/>
+                <Label>Sync Calendar</Label>
+              </div> </>}
+            {this.state.dataLoading && this.state.isGroupIDValid &&
+            <>
+            <div style={itemRefreshStyles}>
+              <Label >Refreshing... </Label>
+              <Spinner size={SpinnerSize.large} />
+            </div>
+            </>}
          </Stack>
         {this.state.isGroupIDValid && <>
         <div>
@@ -161,7 +167,6 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
                 <div>
                     <HomeIcon></HomeIcon>
                 </div>
-                <div></div>
                 <div>
                     <Label style={invalidGroupStyle}> - Unable to retrieve GroupID from the given site. Please check your site name.</Label>
                 </div>
