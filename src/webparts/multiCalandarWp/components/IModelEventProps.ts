@@ -5,5 +5,6 @@ export interface IModelEventProps {
     start: string;
     end: string;
     details: string;
+    color: string;
     onClose: () => void;
 }

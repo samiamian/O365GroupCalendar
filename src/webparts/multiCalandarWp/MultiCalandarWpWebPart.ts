@@ -11,6 +11,7 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'MultiCalandarWpWebPartStrings';
 import MultiCalandarWp from './components/MultiCalandarWp';
 import { IMultiCalandarWpProps } from './components/IMultiCalandarWpProps';
+import { PropertyFieldColorPicker, PropertyFieldColorPickerStyle } from '@pnp/spfx-property-controls/lib/PropertyFieldColorPicker';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -32,6 +33,8 @@ export default class MultiCalandarWpWebPart extends BaseClientSideWebPart<IMulti
       MultiCalandarWp,
       {
         description: this.properties.description,
+        siteName: this.properties.siteName,
+        color: this.properties.color,
         isDarkTheme: this._isDarkTheme,
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
@@ -88,6 +91,24 @@ export default class MultiCalandarWpWebPart extends BaseClientSideWebPart<IMulti
               groupFields: [
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
+                }),
+                PropertyPaneTextField('siteName', {
+                  label: strings.SiteFieldLabel,
+                  multiline: false,
+                  resizable: false,
+                }),
+                PropertyFieldColorPicker('color', {
+                  label: strings.SiteFieldLabel,
+                  selectedColor: this.properties.color,
+                  onPropertyChange: this.onPropertyPaneFieldChanged,
+                  properties: this.properties,
+                  disabled: false,
+                  debounce: 1000,
+                  isHidden: false,
+                  alphaSliderHidden: false,
+                  style: PropertyFieldColorPickerStyle.Full,
+                  iconName: 'Precipitation',
+                  key: 'colorFieldId'
                 })
               ]
             }

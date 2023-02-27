@@ -57,9 +57,12 @@ const itemStartStyles: React.CSSProperties = {
   justifyContent: 'left',
 };
 
+
+
 const HomeIcon = () => <Icon iconName="ChromeClose" className={icon}/>;
 
 export default class MultiCalandarWp extends React.Component<IMultiCalandarWpProps, IMultiCalandarWpState,{}> {
+
 
   constructor(props: IMultiCalandarWpProps){
     super(props);
@@ -88,25 +91,28 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
 
   public componentDidMount() {    
     //Get group ID of the Site
-      mcs.getGroupGUID("sami_team_test",this.props.context)
+      mcs.getGroupGUID(decodeURIComponent(this.props.siteName),this.props.context)
         .then(value => {
           this.setState({ groupID: value,isGroupIDValid: true , calendarLoading: false});
+          mcs.getAllGroupEvents(value,this.props.context)
+          .then(value => {
+            this.setState({ events: value});
+          });
+
         }).catch(err => {
           console.log(err);
           this.setState({ groupID: "Group ID Data not retrieved! Contact Admin.", isGroupIDValid: false, calendarLoading: false});
         });
+//sami_team_test
+        //"afaf4c15-0090-48ad-a4bf-e8dcbef1200c"
 
-      mcs.getAllGroupEvents("afaf4c15-0090-48ad-a4bf-e8dcbef1200c",this.props.context)
-        .then(value => {
-          this.setState({ events: value});
-        });
 
   }
 
   public refreshEvents(){
     this.setState({refreshed : !this.state.refreshed, dataLoading: !this.state.dataLoading, events: []});
 
-    mcs.getAllGroupEvents("afaf4c15-0090-48ad-a4bf-e8dcbef1200c",this.props.context)
+    mcs.getAllGroupEvents(this.state.groupID,this.props.context)
     .then(value => {
       this.setState({ events: value});
     });
@@ -115,6 +121,8 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
   public render(): React.ReactElement<IMultiCalandarWpProps> {
     const {
       description,
+      siteName,
+      color,
       isDarkTheme,
       environmentMessage,
       hasTeamsContext,
@@ -125,7 +133,7 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
       <div>
           {this.state.calendarLoading && !this.state.isGroupIDValid &&<Spinner size={SpinnerSize.large} />}
           <Stack enableScopedSelectors horizontal horizontalAlign="space-between">
-            <div style={itemStartStyles}> {this.state.isGroupIDValid && <><Label>Events of </Label></>}</div>
+            <div style={itemStartStyles}> {this.state.isGroupIDValid && <><Label>Events of {decodeURIComponent(this.props.description)} {this.props.color}  </Label></>}</div>
             {this.state.refreshed && this.state.isGroupIDValid &&<><div style={itemRefreshStyles}><FontIcon title='Refresh Event List' aria-label='Refresh' iconName='Refresh' className={iconClass} onClick={(event) => {this.refreshEvents()}}/><Label>Sync Calendar</Label></div> </>}
             {this.state.dataLoading && this.state.isGroupIDValid &&<><div style={itemRefreshStyles}><Label >Refreshing... </Label><Spinner size={SpinnerSize.large} /></div></>}
          </Stack>
@@ -139,10 +147,15 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
                   startAccessor="start"
                   endAccessor="end"
                   onSelectEvent={(e) => this.eventSelected(e)}
+                  eventPropGetter={event => ({style: {backgroundColor: this.props.color}})}
                   style={{ height: 500 }} />
               </div>
             </Fragment>
          </div></>}
+         <div className={styles.oneLine}>
+            <div className={styles.square} style={{backgroundColor:this.props.color}}></div>
+            <div>{this.props.siteName}</div>
+        </div>
          <Stack enableScopedSelectors horizontal horizontalAlign="space-around">
             {!this.state.isGroupIDValid && !this.state.calendarLoading &&<>
                 <div>
@@ -160,6 +173,7 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
             start={this.state.aEvent.start} 
             end={this.state.aEvent.end} 
             details={this.state.aEvent.bodyPreview}
+            color={this.props.color}
             onClose={this.closeDialog.bind(this)}> 
           </ModelEvent> : <></>  }
       </div>

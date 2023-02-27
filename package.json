@@ -20,6 +20,7 @@
     "@pnp/logging": "^2.11.0",
     "@pnp/odata": "^2.11.0",
     "@pnp/sp": "^2.11.0",
+    "@pnp/spfx-property-controls": "^3.12.0",
     "bootstrap": "^5.2.3",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.40",

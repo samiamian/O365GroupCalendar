@@ -1,6 +1,8 @@
 define([], function() {
   return {
     "PropertyPaneDescription": "Description",
+    "SiteFieldLabel": "Site Name",
+    "ColorFieldLabel": "Color",
     "BasicGroupName": "Group Name",
     "DescriptionFieldLabel": "Description Field",
     "AppLocalEnvironmentSharePoint": "The app is running on your local environment as SharePoint web part",

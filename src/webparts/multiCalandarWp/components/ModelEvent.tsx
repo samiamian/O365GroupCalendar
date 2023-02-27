@@ -39,7 +39,7 @@ export default class ModelEvent extends React.Component<IModelEventProps, {}> {
 
   public render(): React.ReactElement<IModelEventProps> {
     const buttonStyles = {
-      root: { backgroundColor: '#003057', color: 'white' }
+      root: { backgroundColor: this.props.color, color: 'white' }
     };
     return (
       <div>
