@@ -80,10 +80,10 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
   }
 
   public toggleModal(){
-    this.setState({isModalOpen: !this.state.isModalOpen})
+    this.setState({isModalOpen: !this.state.isModalOpen});
   }
   public closeDialog() {  
-    this.setState({ isModalOpen: false })  
+    this.setState({ isModalOpen: false });
   } 
   public eventSelected = (event: object) => {
       this.setState({isModalOpen: true,aEvent: event});
@@ -133,7 +133,7 @@ export default class MultiCalandarWp extends React.Component<IMultiCalandarWpPro
       <div>
           {this.state.calendarLoading && !this.state.isGroupIDValid &&<Spinner size={SpinnerSize.large} />}
           <Stack enableScopedSelectors horizontal horizontalAlign="space-between">
-            <div style={itemStartStyles}> {this.state.isGroupIDValid && <><Label>Events of {decodeURIComponent(this.props.description)} {this.props.color}  </Label></>}</div>
+            <div style={itemStartStyles}> {this.state.isGroupIDValid && <><Label>Events of {decodeURIComponent(this.props.description)}</Label></>}</div>
             {this.state.refreshed && this.state.isGroupIDValid &&<><div style={itemRefreshStyles}><FontIcon title='Refresh Event List' aria-label='Refresh' iconName='Refresh' className={iconClass} onClick={(event) => {this.refreshEvents()}}/><Label>Sync Calendar</Label></div> </>}
             {this.state.dataLoading && this.state.isGroupIDValid &&<><div style={itemRefreshStyles}><Label >Refreshing... </Label><Spinner size={SpinnerSize.large} /></div></>}
          </Stack>

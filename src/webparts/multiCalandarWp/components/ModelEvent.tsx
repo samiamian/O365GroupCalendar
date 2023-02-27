@@ -21,7 +21,7 @@ const dialogContentProps = {
 
 const modalProps = {  
   isBlocking: true,  
-} 
+};
 
 
 export default class ModelEvent extends React.Component<IModelEventProps, {}> {
@@ -33,10 +33,8 @@ export default class ModelEvent extends React.Component<IModelEventProps, {}> {
 
   public handleClose() {  
     this.props.onClose();
-  }; 
-
-
-
+  }
+  
   public render(): React.ReactElement<IModelEventProps> {
     const buttonStyles = {
       root: { backgroundColor: this.props.color, color: 'white' }
